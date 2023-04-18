@@ -12,11 +12,14 @@ defmodule ThumbHash do
   Returns a list of integer values that make up thumbhash of the image
   Images must be pre-scaled to fit within a 100px x 100px bounding box.
   """
+  @spec rgba_to_thumb_hash(non_neg_integer(), non_neg_integer(), binary()) ::
+          list(non_neg_integer()) | no_return()
   def rgba_to_thumb_hash(_width, _height, _rgba), do: :erlang.nif_error(:nif_not_loaded)
 
   @doc """
   Generates a base64 encoded thumbhash of the image located at `path`
   """
+  @spec generate_base64_hash!(Path.t()) :: binary() | no_return()
   def generate_base64_hash!(path) do
     thumbnail =
       path
