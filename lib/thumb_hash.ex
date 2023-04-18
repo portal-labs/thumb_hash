@@ -26,14 +26,19 @@ defmodule ThumbHash do
       |> Image.open!()
       |> Image.thumbnail!(100, export_icc_profile: :srgb)
 
-    alpha = Image.new!(Image.width(thumbnail), Image.height(thumbnail), bands: 1, color: 255)
+    image_with_alpha =
+      if Image.has_alpha?(thumbnail) do
+        thumbnail
+      else
+        alpha = Image.new!(Image.width(thumbnail), Image.height(thumbnail), bands: 1, color: 255)
+        Image.add_alpha!(thumbnail, alpha)
+      end
 
-    {:ok, tensor} =
-      thumbnail
-      |> Image.add_alpha!(alpha)
-      |> Vix.Vips.Image.write_to_tensor()
+    {:ok, tensor} = Vix.Vips.Image.write_to_tensor(image_with_alpha)
 
-    %{data: data, shape: {w, h, 4}, names: [:width, :height, :bands], type: {:u, 8}} = tensor
+    %Vix.Tensor{data: data, shape: {w, h, 4}, names: [:width, :height, :bands], type: {:u, 8}} =
+      tensor
+
     hash = rgba_to_thumb_hash(w, h, data)
     hashbin = Enum.into(hash, <<>>, fn int -> <<int::8>> end)
     Base.encode64(hashbin)
