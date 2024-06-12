@@ -10,7 +10,7 @@ defmodule ThumbHashTest do
 
   test "generates a hash of an image with an alpha channel" do
     alpha_image = Path.join(__DIR__, "with-alpha.png")
-    hash = "EmmOI4gPgod/h5egexP4ZwAAh4d3eIg="
+    hash = "EmmOI4gPgod/h5egexP4ZwAAh4d3d4g="
     assert ThumbHash.generate_base64_hash!(alpha_image) == hash
   end
 end

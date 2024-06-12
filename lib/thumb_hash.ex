@@ -21,11 +21,17 @@ defmodule ThumbHash do
   """
   @spec generate_base64_hash!(Path.t()) :: binary() | no_return()
   def generate_base64_hash!(path) do
-    thumbnail =
-      path
-      |> Image.open!()
-      |> Image.thumbnail!(100, export_icc_profile: :srgb)
+    path
+    |> Image.open!()
+    |> Image.thumbnail!(100, export_icc_profile: :srgb)
+    |> generate_base64_hash_from_buffer!()
+  end
 
+  @doc """
+  Generates a base64 encoded thumbhash of the image stored in `thumbnail`
+  """
+  @spec generate_base64_hash_from_buffer!(binary()) :: binary() | no_return()
+  def generate_base64_hash_from_buffer!(thumbnail) do
     image_with_alpha =
       if Image.has_alpha?(thumbnail) do
         thumbnail
