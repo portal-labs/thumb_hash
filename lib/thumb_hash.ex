@@ -24,14 +24,20 @@ defmodule ThumbHash do
     path
     |> Image.open!()
     |> Image.thumbnail!(100, export_icc_profile: :srgb)
-    |> generate_base64_hash_from_buffer!()
+    |> do_generate!()
   end
 
   @doc """
   Generates a base64 encoded thumbhash of the image stored in `thumbnail`
   """
-  @spec generate_base64_hash_from_buffer!(binary()) :: binary() | no_return()
-  def generate_base64_hash_from_buffer!(thumbnail) do
+  @spec generate_base64_hash_from_binary!(binary()) :: binary() | no_return()
+  def generate_base64_hash_from_binary!(buffer) do
+    buffer
+    |> Image.from_binary!()
+    |> do_generate!()
+  end
+
+  defp do_generate!(thumbnail) do
     image_with_alpha =
       if Image.has_alpha?(thumbnail) do
         thumbnail
@@ -42,7 +48,7 @@ defmodule ThumbHash do
 
     {:ok, tensor} = Vix.Vips.Image.write_to_tensor(image_with_alpha)
 
-    %Vix.Tensor{data: data, shape: {w, h, 4}, names: [:width, :height, :bands], type: {:u, 8}} =
+    %Vix.Tensor{data: data, shape: {h, w, 4}, names: [:height, :width, :bands], type: {:u, 8}} =
       tensor
 
     hash = rgba_to_thumb_hash(w, h, data)
