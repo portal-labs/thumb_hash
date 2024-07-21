@@ -2,6 +2,7 @@ use std::f32::consts::PI;
 use std::io::Read;
 
 use rustler::types::binary::{Binary};
+use rustler::{NifResult, Term, Env};
 
 
 /// Encodes an RGBA image to a ThumbHash. RGB should not be premultiplied by A.
@@ -161,7 +162,10 @@ fn read_byte(bytes: &mut &[u8]) -> Result<u8, ()> {
 /// RGB is not be premultiplied by A. Returns the width, height, and pixels of
 /// the rendered placeholder image. An error will be returned if the input is
 /// too short.
-pub fn thumb_hash_to_rgba(mut hash: &[u8]) -> Result<(usize, usize, Vec<u8>), ()> {
+#[rustler::nif]
+// pub fn thumb_hash_to_rgba(mut hash: &[u8]) -> Result<(usize, usize, Vec<u8>), ()> {
+pub fn thumb_hash_to_rgba(hash_bin: Binary) -> Result<(usize, usize, Vec<u8>), ()> {
+    let mut hash = hash_bin.as_slice();
     let ratio = thumb_hash_to_approximate_aspect_ratio(hash)?;
 
     // Read the constants
@@ -336,4 +340,4 @@ pub fn thumb_hash_to_approximate_aspect_ratio(hash: &[u8]) -> Result<f32, ()> {
     Ok(lx as f32 / ly as f32)
 }
 
-rustler::init!("Elixir.ThumbHash", [rgba_to_thumb_hash]);
+rustler::init!("Elixir.ThumbHash", [rgba_to_thumb_hash, thumb_hash_to_rgba]);
