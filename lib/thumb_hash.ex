@@ -80,8 +80,8 @@ defmodule ThumbHash do
   Generates a base64-encoded, inline representation of an image from a
   base64-encoded `hash` in the given `format` (default: `".png"`)
   """
-  @spec generate_inline_image!(binary(), binary()) :: binary() | no_return()
-  def generate_inline_image!(hash, format \\ ".png") do
+  @spec generate_base64_inline_image!(binary(), binary()) :: binary() | no_return()
+  def generate_base64_inline_image!(hash, format \\ ".png") do
     with {:ok, img} <- generate_image(hash),
          {:ok, buf} <- VixImage.write_to_buffer(img, format) do
       Base.encode64(buf)
