@@ -67,9 +67,9 @@ defmodule ThumbHash do
   @doc """
   Generates an image from a base64-encoded `hash`
   """
-  @spec generate_image_from_base64_hash!(binary()) :: binary() | no_return()
-  def generate_image_from_base64_hash!(hash) do
-    case generate_image_from_base64_hash(hash) do
+  @spec generate_image!(binary()) :: binary() | no_return()
+  def generate_image!(hash) do
+    case generate_image(hash) do
       {:ok, img} -> img
       {:error, err} -> raise err
       err -> raise err
@@ -77,22 +77,22 @@ defmodule ThumbHash do
   end
 
   @doc """
-  Generates an inline representation of an image from a base64-encoded
-  `hash` in the given `format` (default: `".png"`)
+  Generates a base64-encoded, inline representation of an image from a
+  base64-encoded `hash` in the given `format` (default: `".png"`)
   """
-  @spec generate_inline_image_from_base64_hash!(binary(), binary()) | binary() | no_return()
-  def generate_inline_image_from_base64_hash!(hash, format \\ ".png") do
-    with {:ok, img} <- generate_image_from_base64_hash(hash),
+  @spec generate_inline_image!(binary(), binary()) :: binary() | no_return()
+  def generate_inline_image!(hash, format \\ ".png") do
+    with {:ok, img} <- generate_image(hash),
          {:ok, buf} <- VixImage.write_to_buffer(img, format) do
-      buf
+      Base.encode64(buf)
     else
       err -> err
     end
   end
 
-  defp generate_image_from_base64_hash(hash) do
-    with {:ok, decoded} <- Base.decode64(hash),
-         {:ok, {w, h, data}} <- thumb_hash_to_rgba(decoded) do
+  defp generate_image(hash_b64) do
+    with {:ok, hash} <- Base.decode64(hash_b64),
+         {:ok, {w, h, data}} <- thumb_hash_to_rgba(hash) do
       rgba_to_image(data, w, h)
     else
       err -> err

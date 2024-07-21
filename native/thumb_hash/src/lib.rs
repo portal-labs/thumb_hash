@@ -2,7 +2,6 @@ use std::f32::consts::PI;
 use std::io::Read;
 
 use rustler::types::binary::{Binary};
-use rustler::{NifResult, Term, Env};
 
 
 /// Encodes an RGBA image to a ThumbHash. RGB should not be premultiplied by A.
