@@ -26,3 +26,5 @@ thumb_hash-*.tar
 /tmp/
 
 .DS_Store
+
+/priv/native
