@@ -18,6 +18,7 @@ defmodule ThumbHash.MixProject do
 
   defp package() do
     [
+      files: ~w(lib native .formatter.exs mix.exs README* LICENSE*),
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/portal-labs/thumb_hash"}
     ]
@@ -34,7 +35,8 @@ defmodule ThumbHash.MixProject do
   defp deps do
     [
       {:image, "~> 0.37"},
-      {:rustler, "~> 0.29"}
+      {:rustler, "~> 0.29"},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
     ]
   end
 end
