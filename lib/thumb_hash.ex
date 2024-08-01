@@ -2,6 +2,8 @@ defmodule ThumbHash do
   @moduledoc """
   A bridge to the Rust ThumbHash library.
   See: https://github.com/evanw/thumbhash for original implmentation.
+
+  Note: a Rust toolchain is required to compile the rust deps.
   """
 
   use Rustler, otp_app: :thumb_hash
@@ -10,7 +12,7 @@ defmodule ThumbHash do
   @doc """
   Takes rgba data as a binary in u8 rgba format flattened with 4 values per pixel.
   e.g. <<r1 g1 b1 a1 r2 g2 b2 a2 ...>>
-  Returns a list of integer values that make up thumbhash of the image
+  Returns a list of integer values that make up a thumbhash of the image
   Images must be pre-scaled to fit within a 100px x 100px bounding box.
   """
   @spec rgba_to_thumb_hash(non_neg_integer(), non_neg_integer(), binary()) ::
@@ -21,7 +23,7 @@ defmodule ThumbHash do
   Takes a hash as a binary and returns the width, height, and image data.
   """
   @spec thumb_hash_to_rgba(binary()) ::
-          {non_neg_integer(), non_neg_integer(), binary()} | no_return()
+          {:ok, {non_neg_integer(), non_neg_integer(), binary()}} | {:error, any()} | no_return()
   def thumb_hash_to_rgba(_b64_hash), do: :erlang.nif_error(:nif_not_loaded)
 
   @doc """
