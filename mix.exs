@@ -4,7 +4,7 @@ defmodule ThumbHash.MixProject do
   def project do
     [
       app: :thumb_hash,
-      version: "0.1.0",
+      version: "0.2.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps()
@@ -22,7 +22,7 @@ defmodule ThumbHash.MixProject do
   defp deps do
     [
       {:image, "~> 0.37"},
-      {:rustler, "~> 0.29.1"}
+      {:rustler, "~> 0.29"}
     ]
   end
 end

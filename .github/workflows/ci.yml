@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+    test:
+      runs-on: ubuntu-latest
+      name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+      strategy:
+        matrix:
+          include: 
+            - pair:
+                elixir: 1.17.2
+                otp: 27.0
+              lint: lint
+      steps:
+        - uses: actions/checkout@v4
+        - uses: erlef/setup-beam@v1
+          with:
+            otp-version: ${{matrix.otp}}
+            elixir-version: ${{matrix.elixir}}
+        
+        - name: Install minimal stable Rust toolchain
+          uses: actions-rs/toolchain@v1
+          with:
+            profile: minimal
+            toolchain: stable
+        
+        - name: Install Dependencies
+          run: mix deps.get
+        
+        - name: Check Formatting
+          run: mix format --check-formatted
+          if: ${{ matrix.lint }}
+        
+        - name: Check Unused Deps
+          run: mix deps.unlock --check-unused
+          if: ${{ matrix.lint }}
+        
+        - name: Compile Project
+          run: mix deps.compile
+        
+        - name: Check for Compilation Warnings
+          run: mix compile --warnings-as-errors
+          if: ${{ matrix.lint }}
+        
+        - name: Run Tests
+          run: mix test
