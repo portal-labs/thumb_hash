@@ -111,8 +111,7 @@ defmodule ThumbHash do
   defp rgba_to_image(rgba, w, h) do
     rgba
     # use native endianness, see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
-    |> Enum.into(<<>>, &<<&1::native>>)
-    |> IO.inspect(limit: :infinity)
+    |> Enum.into(<<>>, &<<&1::native-unsigned-integer-8>>)
     |> VixImage.new_from_binary(w, h, 4, :VIPS_FORMAT_UCHAR)
   end
 end
