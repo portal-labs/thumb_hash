@@ -21,7 +21,7 @@ defmodule ThumbHash.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:image, "~> 0.36.2"},
+      {:image, "~> 0.37"},
       {:rustler, "~> 0.29.1"}
     ]
   end
