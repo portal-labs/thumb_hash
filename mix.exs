@@ -4,10 +4,22 @@ defmodule ThumbHash.MixProject do
   def project do
     [
       app: :thumb_hash,
+      name: "ThumbHash",
+      description: "An Elixir bridge to the Rust ThumbHash library.",
       version: "0.2.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      package: package(),
+      source_url: "https://github.com/portal-labs/thumb_hash",
+      homepage_url: "https://github.com/portal-labs/thumb_hash"
+    ]
+  end
+
+  defp package() do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/portal-labs/thumb_hash"}
     ]
   end
 

@@ -1,7 +1,7 @@
 # ThumbHash
 
 An Elixir bridge to the Rust ThumbHash library.
-See: https://github.com/evanw/thumbhash for original implmentation.
+See: https://github.com/evanw/thumbhash for original implementation.
 
 ## Installation
 
@@ -13,7 +13,7 @@ by adding `thumb_hash` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:thumb_hash, "~> 0.1.0"}
+    {:thumb_hash, "~> 0.2.0"}
   ]
 end
 ```

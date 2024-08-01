@@ -1,7 +1,7 @@
 defmodule ThumbHash do
   @moduledoc """
   A bridge to the Rust ThumbHash library.
-  See: https://github.com/evanw/thumbhash for original implmentation.
+  See: https://github.com/evanw/thumbhash for original implementation.
 
   Note: a Rust toolchain is required to compile the rust deps.
   """
