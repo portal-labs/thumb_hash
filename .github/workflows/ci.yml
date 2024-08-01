@@ -9,7 +9,7 @@ on:
 jobs:
     test:
       runs-on: ubuntu-latest
-      name: OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+      name: OTP ${{matrix.pair.otp}} / Elixir ${{matrix.pair.elixir}}
       strategy:
         matrix:
           include: 
