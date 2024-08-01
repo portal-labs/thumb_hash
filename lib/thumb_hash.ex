@@ -69,7 +69,7 @@ defmodule ThumbHash do
   @doc """
   Generates an image from a base64-encoded `hash`
   """
-  @spec generate_image!(binary()) :: binary() | no_return()
+  @spec generate_image!(binary()) :: VixImage.t() | no_return()
   def generate_image!(hash) do
     case generate_image(hash) do
       {:ok, img} -> img
@@ -103,7 +103,8 @@ defmodule ThumbHash do
 
   defp rgba_to_image(rgba, w, h) do
     rgba
-    |> Enum.into(<<>>, &<<&1::8>>)
+    # use native endianness, see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
+    |> Enum.into(<<>>, &<<&1::native-size(8)>>)
     |> VixImage.new_from_binary(w, h, 4, :VIPS_FORMAT_UCHAR)
   end
 end
