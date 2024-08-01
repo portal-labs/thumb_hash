@@ -16,13 +16,13 @@ defmodule ThumbHash do
   Images must be pre-scaled to fit within a 100px x 100px bounding box.
   """
   @spec rgba_to_thumb_hash(non_neg_integer(), non_neg_integer(), binary()) ::
-          list(non_neg_integer()) | no_return()
+          list(byte()) | no_return()
   def rgba_to_thumb_hash(_width, _height, _rgba), do: :erlang.nif_error(:nif_not_loaded)
 
   @doc """
   Takes a hash as a binary and returns the width, height, and image data.
   """
-  @spec thumb_hash_to_rgba(binary()) ::
+  @spec thumb_hash_to_rgba(list(byte())) ::
           {:ok, {non_neg_integer(), non_neg_integer(), binary()}} | {:error, any()} | no_return()
   def thumb_hash_to_rgba(_b64_hash), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -92,19 +92,27 @@ defmodule ThumbHash do
     end
   end
 
-  defp generate_image(hash_b64) do
-    with {:ok, hash} <- Base.decode64(hash_b64),
-         {:ok, {w, h, data}} <- thumb_hash_to_rgba(hash) do
+  defp generate_image(hash) do
+    with {:ok, bin} <- base64_decode_bytes(hash),
+         {:ok, {w, h, data}} <- thumb_hash_to_rgba(bin) do
       rgba_to_image(data, w, h)
     else
       err -> err
     end
   end
 
+  defp base64_decode_bytes(hash) do
+    case Base.decode64(hash) do
+      {:ok, bin} -> {:ok, :binary.bin_to_list(bin)}
+      error -> error
+    end
+  end
+
   defp rgba_to_image(rgba, w, h) do
     rgba
-    # use native endianness, see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
-    |> Enum.into(<<>>, &<<&1::native-size(8)>>)
+    # ensure we use native endianness, 
+    # see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
+    |> Enum.into(<<>>, &<<&1::native-unsigned-integer-8>>)
     |> VixImage.new_from_binary(w, h, 4, :VIPS_FORMAT_UCHAR)
   end
 end

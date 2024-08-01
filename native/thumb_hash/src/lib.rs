@@ -162,8 +162,7 @@ fn read_byte(bytes: &mut &[u8]) -> Result<u8, ()> {
 /// the rendered placeholder image. An error will be returned if the input is
 /// too short.
 #[rustler::nif]
-// pub fn thumb_hash_to_rgba(mut hash: &[u8]) -> Result<(usize, usize, Vec<u8>), ()> {
-pub fn thumb_hash_to_rgba(hash_bin: Binary) -> Result<(usize, usize, Vec<u8>), ()> {
+pub fn thumb_hash_to_rgba(hash_bin: Vec<u8>) -> Result<(usize, usize, Vec<u8>), ()> {
     let mut hash = hash_bin.as_slice();
     let ratio = thumb_hash_to_approximate_aspect_ratio(hash)?;
 
