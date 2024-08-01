@@ -100,7 +100,7 @@ defmodule ThumbHash do
       err -> err
     end
   end
-  
+
   defp base64_decode_bytes(hash) do
     case Base.decode64(hash) do
       {:ok, bin} -> {:ok, :binary.bin_to_list(bin)}
