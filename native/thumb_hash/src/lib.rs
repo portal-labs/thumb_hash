@@ -288,10 +288,10 @@ pub fn thumb_hash_to_rgba(hash_bin: Vec<u8>) -> Result<(usize, usize, Vec<u8>), 
             let r = (3.0 * l - b + q) / 2.0;
             let g = r - q;
             rgba.extend_from_slice(&[
-                ((r.clamp(0.0, 1.0) * 255.0) as u8).to_be(),
-                ((g.clamp(0.0, 1.0) * 255.0) as u8).to_be(),
-                ((b.clamp(0.0, 1.0) * 255.0) as u8).to_be(),
-                ((a.clamp(0.0, 1.0) * 255.0) as u8).to_be(),
+                (r.clamp(0.0, 1.0) * 255.0) as u8,
+                (g.clamp(0.0, 1.0) * 255.0) as u8,
+                (b.clamp(0.0, 1.0) * 255.0) as u8,
+                (a.clamp(0.0, 1.0) * 255.0) as u8,
             ]);
         }
     }
