@@ -22,7 +22,7 @@ defmodule ThumbHash do
   @doc """
   Takes a hash as a binary and returns the width, height, and image data.
   """
-  @spec thumb_hash_to_rgba([byte()]) ::
+  @spec thumb_hash_to_rgba(list(byte())) ::
           {:ok, {non_neg_integer(), non_neg_integer(), binary()}} | {:error, any()} | no_return()
   def thumb_hash_to_rgba(_b64_hash), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -110,7 +110,8 @@ defmodule ThumbHash do
 
   defp rgba_to_image(rgba, w, h) do
     rgba
-    # use native endianness, see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
+    # ensure we use native endianness, 
+    # see: https://hexdocs.pm/vix/Vix.Vips.Image.html#new_from_binary/5
     |> Enum.into(<<>>, &<<&1::native-unsigned-integer-8>>)
     |> VixImage.new_from_binary(w, h, 4, :VIPS_FORMAT_UCHAR)
   end
